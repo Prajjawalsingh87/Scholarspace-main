@@ -54,3 +54,26 @@ This is a static site, so the repository root deploys as-is on Vercel (`vercel d
 
 - ScholarSpace was created by **[Priyanshu Kumar](https://github.com/priyanshu-p7)**, a B.Tech CSE student at BBD University.
 - This repository is a fork of **[Rahul-web01/Scholarspace-main](https://github.com/Rahul-web01/Scholarspace-main)**. All content, study links and the original idea come from the upstream project. This fork updates the UI (design system, responsive layout, accessibility) and the deployment.
+
+
+## October 2026 improvements
+
+Save subject cards on first- and second-year pages and filter to saved subjects. Bookmarks combine with subject search and persist on the current browser when storage is available. All upstream attribution and resource links are retained.
+
+
+## Terminal verification and deployment
+
+```bash
+python3 -m http.server 5187
+```
+
+No package installation or build is required.
+
+```bash
+vercel link --project scholarspace
+vercel deploy          # preview
+vercel deploy --prod   # publish production
+```
+
+The local `.vercel/` link is ignored by Git. Deployment credentials belong in
+the CLI's login session, never in this repository.
