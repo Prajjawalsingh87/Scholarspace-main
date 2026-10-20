@@ -115,6 +115,17 @@
     creditsEl.textContent = String(totalCredits);
     statusEl.textContent = "Your SGPA";
 
+    // Remember this result so the CGPA calculator can reuse it.
+    var page = location.pathname.match(/B_tech_(cse|ai)_(\d)/i);
+    if (page) {
+      try {
+        var saved = JSON.parse(localStorage.getItem("scholarspace:sgpa-results")) || {};
+        var course = page[1].toLowerCase() === "ai" ? "CS-AI" : "CSE";
+        saved[course + "-" + page[2]] = { course: course, sem: Number(page[2]), sgpa: Number(sgpa), credits: totalCredits, at: Date.now() };
+        localStorage.setItem("scholarspace:sgpa-results", JSON.stringify(saved));
+      } catch (_) { /* Storage unavailable; the result is still shown. */ }
+    }
+
     if (window.matchMedia("(max-width: 960px)").matches) {
       document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "start" });
     }
