@@ -9,12 +9,15 @@ ScholarSpace is a one-stop study hub for university students: subject-wise notes
 - **Explore Notes**: University → Department → Year → subject cards with links to Notes, PYQ Papers, Video Lectures and Practice Sets (B.Tech first and second year). Each year has a subject search.
 - **Courses**: curated courses and YouTube playlists (DSA, C, C++ and more).
 - **SGPA Calculator**: B.Tech CSE and CS-AI, semesters 1–4. It uses the BBD University grade points and per-subject credits, checks inputs inline and runs entirely in the browser.
+- **Global search**: press <kbd>Ctrl</kbd>+<kbd>K</kbd> (<kbd>⌘</kbd>+<kbd>K</kbd> on Mac), <kbd>/</kbd>, or the Search button in the header to search every subject, notes/PYQ/video/practice link, course, year, department and SGPA calculator from any page. It is fuzzy and typo-tolerant (powered by [MiniSearch](https://github.com/lucaong/minisearch)), understands short forms like "dbms", "coa", "evs" or "maths 2", and ranks the best match first. Use the arrow keys and <kbd>Enter</kbd> to jump straight to a subject card or open a resource in a new tab; <kbd>Esc</kbd> closes it. `?search=dbms` in any page URL opens search pre-filled.
+- **Recently viewed**: subjects, resources and calculators you open are listed on the home page and in the search box (stored only in your browser, with a Clear button).
+- **CGPA Calculator** (`sgpa/cgpa.html`): combine semester SGPAs into a credit-weighted CGPA. Credits for B.Tech semesters 1–4 are pre-filled, results from the SGPA calculator can be filled in with one click, and your entries are kept in this browser.
 - **Feedback**: opens your email app with the message filled in.
 - Responsive layout with a mobile menu, keyboard focus styles, a skip link and accessible labels.
 
 ## Tech
 
-Plain static HTML, CSS and JavaScript, with no build step and no backend.
+Plain static HTML, CSS and JavaScript, with no build step and no backend. Search loads MiniSearch 7.1.0 from jsDelivr the first time it is opened.
 
 ```
 index.html              Home
@@ -26,11 +29,26 @@ feedback1.html          Feedback (mailto)
 about.html              About the creator
 404.html
 sgpa/                   SGPA calculator (course → semester → calculator, sgpa.js)
+sgpa/cgpa.html, cgpa.js CGPA calculator (combines semesters)
 assets/css/styles.css   Shared design system
-assets/js/main.js       Mobile nav, subject search, feedback form, image fallbacks
+assets/js/main.js       Mobile nav, global search, recently viewed, subject filter,
+                        feedback form, image fallbacks
+assets/data/search-index.json  Search index generated from the pages
+scripts/build-search-index.mjs Builds the search index (Node, no dependencies)
 assets/img/             Favicon, hero and subject images
 vercel.json             Clean URLs + asset caching
 ```
+
+## Search index
+
+The search index is generated from the HTML pages themselves, so it stays in step with the subject cards, links and calculators. After editing any page, rebuild it and commit the result:
+
+```bash
+node scripts/build-search-index.mjs          # writes assets/data/search-index.json
+node scripts/build-search-index.mjs --check  # fails if the committed index is out of date
+```
+
+Short forms that students commonly type (for example "dbms", "coa", "maths 2") live in the `ALIASES` list in the script.
 
 ## Run locally
 
