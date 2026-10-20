@@ -44,13 +44,49 @@
   var search = document.getElementById("subject-search");
   if (search) {
     var cards = Array.prototype.slice.call(document.querySelectorAll("[data-subject]"));
+    var bookmarks = [];
+    try {
+      var stored = JSON.parse(localStorage.getItem("scholarspace:subjects"));
+      if (Array.isArray(stored)) bookmarks = stored.filter(function (v) { return typeof v === "string"; });
+    } catch (_) { /* Continue without persistence. */ }
+    var savedOnly = false;
+    var savedFilter = document.createElement("button");
+    savedFilter.type = "button";
+    savedFilter.className = "bookmark-button";
+    savedFilter.textContent = "Saved subjects";
+    savedFilter.setAttribute("aria-pressed", "false");
+    search.closest(".filter-bar").appendChild(savedFilter);
+    cards.forEach(function (card) {
+      var name = card.getAttribute("data-subject");
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "bookmark-button";
+      var render = function () {
+        var saved = bookmarks.indexOf(name) !== -1;
+        button.textContent = saved ? "★ Saved" : "☆ Save subject";
+        button.setAttribute("aria-pressed", String(saved));
+        button.setAttribute("aria-label", (saved ? "Unsave " : "Save ") + name);
+      };
+      button.addEventListener("click", function () {
+        bookmarks = bookmarks.indexOf(name) !== -1 ? bookmarks.filter(function (v) { return v !== name; }) : bookmarks.concat(name);
+        try { localStorage.setItem("scholarspace:subjects", JSON.stringify(bookmarks)); } catch (_) { /* Session state remains usable. */ }
+        render(); update();
+      });
+      render();
+      card.querySelector(".body").appendChild(button);
+    });
+    savedFilter.addEventListener("click", function () {
+      savedOnly = !savedOnly;
+      savedFilter.setAttribute("aria-pressed", String(savedOnly));
+      update();
+    });
     var count = document.getElementById("subject-count");
     var empty = document.getElementById("subject-empty");
     var update = function () {
       var q = search.value.trim().toLowerCase();
       var shown = 0;
       cards.forEach(function (c) {
-        var match = !q || c.getAttribute("data-subject").toLowerCase().indexOf(q) !== -1;
+        var match = (!q || c.getAttribute("data-subject").toLowerCase().indexOf(q) !== -1) && (!savedOnly || bookmarks.indexOf(c.getAttribute("data-subject")) !== -1);
         c.hidden = !match;
         if (match) shown++;
       });
