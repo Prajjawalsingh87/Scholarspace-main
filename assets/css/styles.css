@@ -955,3 +955,92 @@ a.res:hover { background: var(--brand-600); border-color: var(--brand-600); colo
 .cgpa-row .input { text-align: center; padding-inline: 8px; }
 .link-btn { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--brand-700); text-decoration: underline; cursor: pointer; }
 .link-btn:hover { color: var(--brand-800); }
+
+/* ---------- Student tools (attendance, target CGPA, exam countdown) ---------- */
+
+:root {
+  --warn: #92400e;
+  --warn-bg: #fffbeb;
+  --warn-line: #fde68a;
+}
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 14px; align-items: end; }
+.form-grid .field { margin-bottom: 0; }
+.form-grid .field-wide { grid-column: span 2; }
+@media (max-width: 560px) { .form-grid .field-wide { grid-column: 1 / -1; } }
+.form-grid .btn { min-height: 46px; }
+.tool-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 14px; }
+.tool-toolbar h2 { font-size: 1.25rem; margin: 0; }
+.inline-field { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: .93rem; color: var(--ink-2); }
+.inline-field .input { width: 96px; min-height: 42px; text-align: center; }
+
+.status { font-weight: 600; font-size: .95rem; display: flex; gap: 8px; align-items: flex-start; margin: 10px 0 0; }
+.status i { margin-top: 3px; }
+.status.is-ok { color: var(--success); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--danger); }
+.status.is-idle { color: var(--muted); font-weight: 500; }
+
+.meter { position: relative; height: 10px; border-radius: 999px; background: #e9eef6; overflow: visible; margin-top: 12px; }
+.meter > span { display: block; height: 100%; border-radius: inherit; background: var(--brand-500); transition: width .3s; }
+.meter.is-ok > span { background: #10b981; }
+.meter.is-warn > span { background: var(--accent); }
+.meter.is-bad > span { background: #ef4444; }
+.meter .mark { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink-2); border-radius: 2px; }
+
+.att-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.att-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px; display: flex; flex-direction: column; }
+.att-card.is-bad { border-color: #fecaca; }
+.att-card header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.att-card h3 { font-size: 1.08rem; margin: 0; overflow-wrap: anywhere; }
+.att-pct { font-family: var(--font-head); font-size: 2rem; font-weight: 700; line-height: 1.1; margin-top: 8px; color: var(--ink); }
+.att-pct small { font-family: var(--font-body); font-size: .9rem; font-weight: 500; color: var(--muted); margin-left: 6px; }
+.att-counts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.att-counts label { font-size: .8rem; font-weight: 600; color: var(--muted); display: grid; gap: 4px; }
+.att-counts .input { min-height: 40px; padding: 8px 10px; text-align: center; }
+.att-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.att-actions .btn { padding: 10px 12px; min-height: 44px; font-size: .92rem; }
+.btn-present { background: var(--success-bg); color: var(--success); border: 1px solid #a7f3d0; }
+.btn-present:hover { background: #d1fae5; color: var(--success); }
+.btn-absent { background: var(--danger-bg); color: var(--danger); border: 1px solid #fecaca; }
+.btn-absent:hover { background: #fee2e2; color: var(--danger); }
+.overall-card .sgpa-score.is-bad { color: var(--danger); }
+.overall-card .sgpa-score.is-warn { color: var(--warn); }
+.overall-card .sgpa-score.is-ok { color: var(--success); }
+
+.empty-state { text-align: center; padding: 36px 20px; border: 2px dashed var(--line); border-radius: var(--radius); color: var(--muted); background: var(--surface); }
+.empty-state i { font-size: 1.8rem; color: var(--brand-200); display: block; margin-bottom: 10px; }
+
+.exam-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.exam-card { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 18px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--brand-500); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 16px 18px; }
+.exam-card.is-near { border-left-color: var(--accent); }
+.exam-card.is-today { border-left-color: #ef4444; }
+.exam-card.is-past { border-left-color: #cbd5e1; background: #f8fafc; box-shadow: none; }
+.exam-card.is-past .exam-date, .exam-card.is-past h3, .exam-card.is-past .exam-when { color: #64748b; }
+.exam-card.is-past .exam-date { background: #eef2f7; }
+.exam-date { display: grid; place-items: center; text-align: center; border-radius: 12px; background: var(--brand-50); color: var(--brand-700); padding: 8px 4px; line-height: 1.1; }
+.exam-date b { font-family: var(--font-head); font-size: 1.6rem; }
+.exam-date span { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.exam-card h3 { font-size: 1.08rem; margin: 0 0 2px; overflow-wrap: anywhere; }
+.exam-when { font-size: .9rem; color: var(--muted); }
+.exam-count { font-weight: 700; color: var(--brand-700); font-size: 1rem; margin-top: 4px; }
+.exam-card.is-near .exam-count { color: var(--warn); }
+.exam-card.is-today .exam-count { color: var(--danger); }
+.exam-card.is-past .exam-count { color: #64748b; font-weight: 500; }
+@media (max-width: 560px) {
+  .exam-card { grid-template-columns: 60px minmax(0, 1fr) 44px; gap: 12px; padding: 14px; }
+  .exam-date b { font-size: 1.3rem; }
+}
+.tool-sub { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 26px 0 10px; }
+.result-big { font-family: var(--font-head); font-size: 3.4rem; font-weight: 700; line-height: 1; margin: 6px 0 4px; color: var(--brand-700); }
+.result-big.is-bad { color: var(--danger); }
+.result-big.is-ok { color: var(--success); }
+.btn[hidden], .link-btn[hidden], .empty-state[hidden] { display: none; }
+/* Seven nav items: keep labels on one line and tighten spacing on desktop. */
+@media (min-width: 961px) {
+  .nav-links { gap: 0; }
+  .nav-links a { white-space: nowrap; padding: 8px 11px; gap: 7px; }
+}
+@media (min-width: 961px) and (max-width: 1240px) {
+  .nav-links a { padding: 8px 9px; font-size: .92rem; }
+  .nav-links a i { display: none; }
+}

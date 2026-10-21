@@ -106,14 +106,18 @@ const PAGES = [
   ["sgpa/select_semester_cs.html", "SGPA Calculator — B.Tech CSE semesters", "sgpa cse semester"],
   ["sgpa/select_semester_ai.html", "SGPA Calculator — B.Tech CS-AI semesters", "sgpa ai cs-ai semester"],
   ["sgpa/cgpa.html", "CGPA Calculator", "cgpa calculator cumulative overall average semesters combine gpa"],
+  ["tools/index.html", "Student Tools", "tools student tools helpers attendance cgpa target exam countdown planner"],
+  ["tools/attendance.html", "Attendance Tracker", "attendance tracker 75 percent bunk skip classes present absent short attendance debarred", "tool"],
+  ["tools/target.html", "What do I need? — Target CGPA calculator", "target cgpa required sgpa needed next semester goal what do i need improve cgpa", "tool"],
+  ["tools/exams.html", "Exam Countdown", "exam countdown date sheet datesheet timetable schedule days left end sem mid sem", "tool"],
   ["feedback1.html", "Feedback", "feedback contact suggest report broken link email"],
   ["about.html", "About ScholarSpace", "about creator priyanshu contact"],
 ];
-for (const [path, title, keywords] of PAGES) {
+for (const [path, title, keywords, kind = "page"] of PAGES) {
   if (!existsSync(join(root, path))) throw new Error("Missing page " + path);
   const html = read(path);
   add({
-    kind: "page", title, url: path, keywords,
+    kind, title, url: path, keywords,
     context: first(html, /<section class="page-hero">[\s\S]*?<p>([\s\S]*?)<\/p>/) ||
       decode((html.match(/<meta name="description" content="([^"]*)"/) || [, ""])[1]),
   });
