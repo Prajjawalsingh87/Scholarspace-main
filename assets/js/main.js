@@ -173,6 +173,11 @@
       context: "SGPA Calculator"
     });
   }
+  // ...and so do the CGPA calculator and the student tools (<main data-recent="Title">).
+  var recentMain = document.querySelector("main[data-recent]");
+  if (recentMain) {
+    addRecent({ url: currentPath(), kind: "tool", title: recentMain.getAttribute("data-recent"), context: "Student Tools" });
+  }
 
   // Global search (Ctrl+K / Cmd+K / "/")
   var KIND = {
@@ -183,10 +188,11 @@
     subject: { icon: "fa-book", label: "Subject" },
     course: { icon: "fa-laptop-code", label: "Course" },
     calculator: { icon: "fa-calculator", label: "Calculator" },
+    tool: { icon: "fa-toolbox", label: "Tool" },
     resource: { icon: "fa-arrow-up-right-from-square", label: "Link" }
   };
   var RES_ICON = { "Notes": "fa-file-lines", "PYQ Papers": "fa-file-circle-question", "Video Lecture": "fa-circle-play", "Practice Set": "fa-pen-ruler", "Start Course": "fa-rocket" };
-  var SUGGESTIONS = ["dbms pyq", "maths 2", "java notes", "sgpa cse 3", "cgpa"];
+  var SUGGESTIONS = ["dbms pyq", "maths 2", "java notes", "sgpa cse 3", "cgpa", "attendance"];
   var iconFor = function (r) {
     var resLabel = r.kind === "resource" ? r.title.split(" — ").pop() : "";
     return RES_ICON[resLabel] || (KIND[r.kind] || KIND.page).icon;
@@ -259,7 +265,7 @@
           return r.json();
         })
       ]).then(function (res) {
-        var weight = { subject: 1.35, calculator: 1.2, page: 1.1, course: 1.1, resource: 0.95 };
+        var weight = { subject: 1.35, calculator: 1.2, tool: 1.2, page: 1.1, course: 1.1, resource: 0.95 };
         engine = new window.MiniSearch({
           fields: ["title", "keywords", "subject", "year", "context", "resources", "text"],
           storeFields: ["kind", "title", "context", "url", "external", "soon"],

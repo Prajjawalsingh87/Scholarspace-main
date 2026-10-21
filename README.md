@@ -12,6 +12,10 @@ ScholarSpace is a one-stop study hub for university students: subject-wise notes
 - **Global search**: press <kbd>Ctrl</kbd>+<kbd>K</kbd> (<kbd>⌘</kbd>+<kbd>K</kbd> on Mac), <kbd>/</kbd>, or the Search button in the header to search every subject, notes/PYQ/video/practice link, course, year, department and SGPA calculator from any page. It is fuzzy and typo-tolerant (powered by [MiniSearch](https://github.com/lucaong/minisearch)), understands short forms like "dbms", "coa", "evs" or "maths 2", and ranks the best match first. Use the arrow keys and <kbd>Enter</kbd> to jump straight to a subject card or open a resource in a new tab; <kbd>Esc</kbd> closes it. `?search=dbms` in any page URL opens search pre-filled.
 - **Recently viewed**: subjects, resources and calculators you open are listed on the home page and in the search box (stored only in your browser, with a Clear button).
 - **CGPA Calculator** (`sgpa/cgpa.html`): combine semester SGPAs into a credit-weighted CGPA. Credits for B.Tech semesters 1–4 are pre-filled, results from the SGPA calculator can be filled in with one click, and your entries are kept in this browser.
+- **Student Tools** (`tools/`, linked as **Tools** in the header): small helpers that save only to your browser:
+  - **Attendance tracker** (`tools/attendance.html`): add subjects with attended and total classes, then tap **Present** or **Absent** after each class (or edit the numbers). Each subject and the overall total shows its percentage against a configurable minimum (default 75%), and tells you either "you can skip N more classes" or "attend the next N classes in a row to reach 75%".
+  - **What do I need?** (`tools/target.html`): enter your current CGPA, credits completed, target CGPA and next semester's credits to get the SGPA you need, rounded up. If the answer is above 10, the page says the target is not possible next semester and shows the highest CGPA you can still reach. It can prefill from the CGPA calculator's saved entries.
+  - **Exam countdown** (`tools/exams.html`): add exams with a date, time and optional room. Cards are sorted soonest first with a live countdown ("in 3 days 4 hours"), today and the next three days are highlighted, and finished exams are greyed out in their own list.
 - **Feedback**: opens your email app with the message filled in.
 - Responsive layout with a mobile menu, keyboard focus styles, a skip link and accessible labels.
 
@@ -30,6 +34,9 @@ about.html              About the creator
 404.html
 sgpa/                   SGPA calculator (course → semester → calculator, sgpa.js)
 sgpa/cgpa.html, cgpa.js CGPA calculator (combines semesters)
+tools/                  Student tools: index (hub), attendance, target, exams
+tools/tools-math.js     Shared maths for the tools (browser + Node)
+tests/                  Node unit tests for the tools' maths (node --test)
 assets/css/styles.css   Shared design system
 assets/js/main.js       Mobile nav, global search, recently viewed, subject filter,
                         feedback form, image fallbacks
@@ -49,6 +56,17 @@ node scripts/build-search-index.mjs --check  # fails if the committed index is o
 ```
 
 Short forms that students commonly type (for example "dbms", "coa", "maths 2") live in the `ALIASES` list in the script.
+
+## Tests
+
+The attendance, target-SGPA and countdown maths live in `tools/tools-math.js` with no DOM access, so Node can test it directly. The attendance rule is also checked against a brute-force simulation for many thresholds:
+
+```bash
+node --test                                   # tool maths unit tests
+node scripts/build-search-index.mjs --check   # search index is current
+```
+
+GitHub Actions (`.github/workflows/ci.yml`) runs both checks on every pull request.
 
 ## Run locally
 

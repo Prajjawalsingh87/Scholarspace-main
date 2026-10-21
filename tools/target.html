@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Target CGPA Calculator | ScholarSpace</title>
+  <meta name="description" content="Find the SGPA you need next semester to reach your target CGPA, from your current CGPA and credits.">
+  <meta name="theme-color" content="#0b1736">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ScholarSpace">
+  <meta property="og:title" content="Target CGPA Calculator | ScholarSpace">
+  <meta property="og:description" content="Find the SGPA you need next semester to reach your target CGPA, from your current CGPA and credits.">
+  <meta property="og:url" content="https://scholarspace-seven.vercel.app/tools/target">
+  <meta property="og:image" content="https://scholarspace-seven.vercel.app/assets/img/hero-books.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="container nav" aria-label="Main">
+      <a class="brand" href="../index.html" aria-label="ScholarSpace home">
+        <img src="../assets/img/favicon.png" alt="" width="34" height="34">
+        <span>Scholar<b>Space</b></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <i class="fas fa-bars icon-open" aria-hidden="true"></i>
+        <i class="fas fa-xmark icon-close" aria-hidden="true"></i>
+      </button>
+      <ul class="nav-links" id="primary-nav">
+        <li><a href="../index.html"><i class="fas fa-house" aria-hidden="true"></i>Home</a></li>
+        <li><a href="../uni1.html"><i class="fas fa-book-open" aria-hidden="true"></i>Explore Notes</a></li>
+        <li><a href="../course1.html"><i class="fas fa-laptop-code" aria-hidden="true"></i>Courses</a></li>
+        <li><a href="../sgpa/index.html"><i class="fas fa-calculator" aria-hidden="true"></i>SGPA Calculator</a></li>
+        <li><a href="../tools/index.html" aria-current="page"><i class="fas fa-toolbox" aria-hidden="true"></i>Tools</a></li>
+        <li><a href="../feedback1.html"><i class="fas fa-pen-to-square" aria-hidden="true"></i>Feedback</a></li>
+        <li><a href="../about.html"><i class="fas fa-circle-info" aria-hidden="true"></i>About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main" data-recent="Target CGPA Calculator">
+  <section class="page-hero">
+    <div class="container">
+      <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../index.html">Home</a></li><li><a href="index.html">Student Tools</a></li><li><span aria-current="page">What do I need?</span></li></ol></nav>
+      <h1>What do I need?</h1>
+      <p>Find the SGPA you need next semester to reach your target CGPA.</p>
+    </div>
+  </section>
+    <section class="section-sm">
+      <div class="container">
+        <form id="target-form" class="sgpa-layout" novalidate>
+          <div class="card">
+            <h2 style="font-size:1.25rem">Your numbers</h2>
+            <div class="alert alert-info" id="target-saved" hidden style="margin-bottom:16px">
+              <i class="fas fa-clock-rotate-left" aria-hidden="true"></i>
+              <span>Your <a href="../sgpa/cgpa.html">CGPA calculator</a> entries are saved: <b id="target-saved-summary"></b>. <button type="button" class="link-btn" id="target-fill">Use them</button></span>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="t-cgpa">Current CGPA</label>
+                <input class="input" id="t-cgpa" name="cgpa" type="number" inputmode="decimal" min="0" max="10" step="0.01" placeholder="e.g. 7.8" aria-describedby="t-cgpa-hint">
+                <span class="hint" id="t-cgpa-hint">0 – 10</span>
+              </div>
+              <div class="field">
+                <label for="t-done">Credits completed</label>
+                <input class="input" id="t-done" name="done" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g. 52" aria-describedby="t-done-hint">
+                <span class="hint" id="t-done-hint">All semesters so far</span>
+              </div>
+              <div class="field">
+                <label for="t-target">Target CGPA</label>
+                <input class="input" id="t-target" name="target" type="number" inputmode="decimal" min="0" max="10" step="0.01" placeholder="e.g. 8.0" aria-describedby="t-target-hint">
+                <span class="hint" id="t-target-hint">After next semester</span>
+              </div>
+              <div class="field">
+                <label for="t-next">Next semester credits</label>
+                <input class="input" id="t-next" name="next" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g. 24" aria-describedby="t-next-hint">
+                <span class="hint" id="t-next-hint">Check your syllabus</span>
+              </div>
+            </div>
+            <div class="alert alert-error" id="target-error" role="alert" hidden style="margin-top:16px"></div>
+            <p class="hint" style="margin:18px 0 0">Formula: needed SGPA = (target × (completed + next credits) − current CGPA × completed credits) ÷ next credits. The answer is rounded up, so reaching it is always enough.</p>
+          </div>
+          <aside class="card result-card" aria-labelledby="target-status">
+            <span class="kicker" id="target-status">Fill in all four numbers</span>
+            <div class="result-big" id="target-score" aria-live="polite">—</div>
+            <p class="status is-idle" id="target-message">The SGPA you need appears here.</p>
+            <ul class="stat-list">
+              <li><span>Best CGPA next semester</span><span id="target-best">—</span></li>
+              <li><span>Lowest CGPA next semester</span><span id="target-worst">—</span></li>
+              <li><span>Total credits after</span><span id="target-total">—</span></li>
+            </ul>
+            <div class="btn-row">
+              <button class="btn btn-light btn-block" type="reset">Clear</button>
+            </div>
+            <p class="hint" style="margin:16px 0 0">Saved only in this browser. Need your current CGPA? <a href="../sgpa/cgpa.html">Use the CGPA calculator</a>.</p>
+          </aside>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="../index.html">
+            <img src="../assets/img/favicon.png" alt="" width="34" height="34">
+            <span>Scholar<b>Space</b></span>
+          </a>
+          <p>Notes, previous-year papers, video lectures and an SGPA calculator for university students, all in one place.</p>
+        </div>
+        <div>
+          <h2>Explore</h2>
+          <ul class="footer-links">
+            <li><a href="../uni1.html">Explore Notes</a></li>
+            <li><a href="../course1.html">Courses</a></li>
+            <li><a href="../sgpa/index.html">SGPA Calculator</a></li>
+            <li><a href="../tools/index.html">Student Tools</a></li>
+            <li><a href="../feedback1.html">Feedback</a></li>
+            <li><a href="../about.html">About</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Connect</h2>
+          <div class="social">
+            <a href="https://github.com/priyanshu-p7" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+            <a href="mailto:priyanshukumar94460@gmail.com" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com/in/priyanahu-kumar-prasad-7836892a7/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 ScholarSpace. All rights reserved.</span>
+        <span>Created by <a href="https://github.com/priyanshu-p7" target="_blank" rel="noopener">Priyanshu Kumar</a></span>
+      </div>
+    </div>
+  </footer>
+  <script src="../assets/js/main.js"></script>
+  <script src="tools-math.js"></script>
+  <script src="target.js"></script>
+</body>
+</html>
