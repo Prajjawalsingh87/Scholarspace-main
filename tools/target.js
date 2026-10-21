@@ -92,9 +92,10 @@
   var fromCgpa = T.cgpaFromRows(load(CGPA_KEY));
   if (fromCgpa) {
     $("target-saved").hidden = false;
-    $("target-saved-summary").textContent = "CGPA " + fmt(fromCgpa.cgpa) + " over " + fromCgpa.credits + " credits";
+    $("target-saved-summary").textContent = "CGPA " + (Math.floor(fromCgpa.cgpa * 100 + 1e-9) / 100).toFixed(2) + " over " + fromCgpa.credits + " credits";
     $("target-fill").addEventListener("click", function () {
-      form.elements.cgpa.value = fmt(fromCgpa.cgpa);
+      // Round down, so the needed SGPA (rounded up) is never understated.
+      form.elements.cgpa.value = (Math.floor(fromCgpa.cgpa * 100 + 1e-9) / 100).toFixed(2);
       form.elements.done.value = fromCgpa.credits;
       var nextSemCredits = DEFAULT_CREDITS[fromCgpa.lastSem + 1];
       if (nextSemCredits && !form.elements.next.value) form.elements.next.value = nextSemCredits;

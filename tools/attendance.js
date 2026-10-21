@@ -187,6 +187,8 @@
     var input = e.target.closest("input[data-field]");
     if (input && input.hasAttribute("aria-invalid")) {
       var li = input.closest(".att-card");
+      // Still editing this card (e.g. tabbing from Attended to Total): keep the typed values.
+      if (e.relatedTarget && li.contains(e.relatedTarget)) return;
       input.removeAttribute("aria-invalid");
       li.querySelectorAll("[aria-invalid]").forEach(function (el) { el.removeAttribute("aria-invalid"); });
       paintCard(li, find(li.getAttribute("data-id")));
